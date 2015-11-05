@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>three js test</title>
+    <script type="text/javascript" src="js/vendor/three.js"></script>
+    <script type="text/javascript" src="js/vendor/TrackballControls.js"></script>
+    <script type="text/javascript" src="js/vendor/stats.min.js"></script>
+    <script type="text/javascript" src="js/vendor/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="./js/vendor/buckets.js"></script>
+    <script type="text/javascript" src="./js/networkchart/graph.js"></script>
+    <script type="text/javascript" src="js/networkchart/networkchart.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+<div id="Stats-output">
+
+</div>
+<div id="WebGL-output">
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        //add function here
+        var stats=initStats();
+
+        var scene=new THREE.Scene();
+        var camera=new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 1000);
+        var trackballControls=new THREE.TrackballControls(camera);
+        trackballControls.rotateSpeed=1.0;
+        trackballControls.zoomSpeed=1.0;
+        trackballControls.panSpeed=1.0;
+        var clock=new THREE.Clock();
+        var renderer=new THREE.WebGLRenderer();
+        renderer.setClearColor('#000000');
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+        camera.position.x=50;
+        camera.position.y=50;
+        camera.position.z=50;
+        camera.lookAt(scene.position);
+
+        //console.log("camera json: "+camera.toJSON())
+
+        console.log("start init network.");
+        var demo=new NetworkChart(scene, camera);
+
+        //初始化一个随机网络供测试
+        demo.initRandomNetwork(2500, 2500);
+
+
+
+        //demo.setAllEdgeColor(new THREE.Color(0x12649b));
+        //根据连通性着色
+        demo.setColorByConnective();
+        demo.showAllVertexLabel();
+
+        var frames=1;
+
+        function renderScene(){
+            stats.update();
+
+            //执行ISOM布局
+            demo.isomLayout(1);
+
+            frames=frames+1;
+
+            //每200帧切换一下是否显示标签
+            if(Math.round(frames%400)==0){
+                demo.showAllVertexLabel();
+                demo.updateHighlight();
+                console.log("show all labels");
+            }else if(Math.round(frames%200)==0){
+                demo.hideAllVertexLabel();
+                console.log("hide all labels");
+            }
+
+            var delta=clock.getDelta();
+            trackballControls.update(delta);
+
+            requestAnimationFrame(renderScene);
+            renderer.render(scene, camera);
+        }
+
+        function initStats(){
+            var stats=new Stats();
+            stats.setMode(0);
+            stats.domElement.style.position='absolute';
+            stats.domElement.style.left='0px';
+            stats.domElement.style.top='0px';
+            $("#Stats-output").append(stats.domElement);
+            return stats;
+        }
+
+        $("#WebGL-output").append(renderer.domElement);
+        renderScene();
+    });
+</script>
+</body>
+</html>

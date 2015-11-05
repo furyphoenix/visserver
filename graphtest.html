@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        graph test
+    </title>
+    <script type="text/javascript" src="./js/vendor/buckets.js"></script>
+    <script type="text/javascript" src="./js/networkchart/graph.js"></script>
+</head>
+<body>
+hello!
+<script type="text/javascript">
+    var map=new buckets.Dictionary();
+    map.set("1","value 1");
+    console.log("key of value 1: "+map.get("1"));
+
+    var graph=new Graph(null);
+    graph.addVertex("A");
+    graph.addVertex("B");
+    graph.addVertex("C");
+    graph.addVertex("D");
+    graph.addVertex("E");
+    graph.addVertex("F");
+    graph.addVertex("G");
+
+
+    graph.addEdge("A-B","A","B");
+    graph.addEdge("B-C","B","C");
+    graph.addEdge("C-A","C","A");
+    graph.addEdge("B-A","B","A");
+    graph.addEdge("C-D","C","D");
+    graph.addEdge("D-E","D","E");
+    graph.addEdge("E-F","E","F");
+    graph.addEdge("F-G","F","G");
+    graph.addEdge("G-E","G","E");
+    graph.addEdge("G-A","G","A");
+
+    console.log("total vertex: "+graph.getVertexCount());
+    console.log("total edge: "+graph.getEdgeCount());
+    console.log("list vertics: "+graph.getVertices());
+    console.log("List edges: "+graph.getEdges());
+
+    console.log("edges connected to A: "+graph.getConnectedEdges("A"));
+    console.log("in edges of A: "+graph.getInEdges("A"));
+    console.log("out edges of A: "+graph.getOutEdges("A"));
+    console.log("degree of A: "+graph.degree("A"));
+    console.log("in degree of A: "+graph.inDegree("A"));
+    console.log("out degree of A: "+graph.outDegree("A"));
+
+    console.log("edges between A and B: "+graph.findEdgeSet("A","B", false));
+    console.log("edge from A to B: "+graph.findEdgeSet("A","B",true));
+    console.log("edge from A to D: "+graph.findEdge("A","D"));
+
+
+    console.log("remove edge D-E");
+    graph.removeEdge("D-E");
+
+    console.log("total vertex: "+graph.getVertexCount());
+    console.log("total edge: "+graph.getEdgeCount());
+    console.log("list vertics: "+graph.getVertices());
+    console.log("List edges: "+graph.getEdges());
+
+    console.log("add edge D-E back");
+    graph.addEdge("D-E","D","E");
+
+    console.log("remove vertex D");
+    graph.removeVertex("D");
+    console.log("total vertex: "+graph.getVertexCount());
+    console.log("total edge: "+graph.getEdgeCount());
+    console.log("list vertics: "+graph.getVertices());
+    console.log("List edges: "+graph.getEdges());
+
+
+    console.log("neighbours of A: "+graph.getNeighbours("A"));
+    console.log("degree of A: "+graph.degree("A"));
+    console.log("ancestor of A: "+graph.getAncestors("A"));
+    console.log("ancestor of A in depth 2: "+graph.getAncestorsInDepth("A",2));
+    console.log("ancestor of A with depth 2: "+graph.getAncestorsWithDepth("A",2));
+    console.log("all ancestors of A: "+graph.getAllNeighbours("A"));
+
+    console.log("descendant of A:"+graph.getDescendants("A"));
+    console.log("descendant of A in depth 2: "+graph.getDescendantsInDepth("A",2));
+    console.log("descendant of A with depth 2 :"+graph.getDescendantsWithDepth("A",2));
+    console.log("all descendant of A:"+graph.getAllDescendants("A"));
+
+    console.log("neighbours of A:"+graph.getNeighbours("A"));
+    console.log("neighbours of A in depth 2: "+graph.getNeighboursInDepth("A", 2));
+    console.log("neighbours of A with depth 2: "+graph.getNeighboursWithDepth("A",2));
+    console.log("all neighbours of A:"+graph.getAllNeighbours("A"));
+
+</script>
+</body>
+</html>
